@@ -10,6 +10,8 @@ from meiduo_mall.libs.yuntongxun.sms import CCP
 import logging
 
 logger = logging.getLogger('django')
+
+
 # url('^sms_codes/(?P<mobile>1[3-9]\d{9})/$', views.SMSCodeView.as_view()),
 class SMSCodeView(APIView):
     """
