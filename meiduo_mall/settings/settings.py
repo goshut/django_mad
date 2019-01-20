@@ -28,7 +28,16 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '192.168.28.128',
+    '127.0.0.1',
 ]
+
+# CORS 追加⽩名单
+CORS_ORIGIN_WHITELIST = (
+ '192.168.28.128:8888',
+ 'localhost:8888',
+)
+# 允许携带cookie
+CORS_ALLOW_CREDENTIALS = True
 
 
 # Application definition
@@ -41,10 +50,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # 最外层的中间件
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -88,6 +99,8 @@ DATABASES = {
         'NAME': 'meiduo_mall'  # 数据库名字
     }
 }
+# MYSQl 修改认证方式
+# ALTER USER 'meiduo'@'%' IDENTIFIED WITH mysql_native_password BY 'mysql';
 
 
 # Password validation

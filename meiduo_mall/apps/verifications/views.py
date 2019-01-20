@@ -25,7 +25,7 @@ class SMSCodeView(APIView):
             return Response({"message": "发送短信过于频繁"}, status=status.HTTP_400_BAD_REQUEST)
         sms_code = '%06d' % randint(0, 999999)
         logger.info(sms_code)
-        CCP().send_template_sms(mobile, [sms_code, 300 // 60], 1)
+        # CCP().send_template_sms(mobile, [sms_code, 300 // 60], 1)
         redis_sms.setex('sms_%s' % mobile, 300, sms_code)
         return Response({'message': 'OK',
                          'sms_code': sms_code})

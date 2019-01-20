@@ -77,7 +77,7 @@ var vm = new Vue({
 		return;
 		}
 		// 向后端接⼝发送请求，让后端发送短信验证码
-		axios.get('http://127.0.0.1:8000' + '/sms_codes/' + this.mobile + '/', {
+		axios.get('http://192.168.28.128:8000' + '/sms_codes/' + this.mobile + '/', {
 		responseType: 'json'
 		})
 		.then(response => {
