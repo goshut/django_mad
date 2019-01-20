@@ -36,7 +36,8 @@ ALLOWED_HOSTS = [
 CORS_ORIGIN_WHITELIST = (
  '192.168.28.128:8888',
  'localhost:8888',
- 'api.meiduo.site:',
+ 'api.meiduo.site:'
+ '',
 )
 # 允许携带cookie
 CORS_ALLOW_CREDENTIALS = True

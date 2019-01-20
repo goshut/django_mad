@@ -27,6 +27,6 @@ class SMSCodeView(APIView):
         logger.info(sms_code)
         # CCP().send_template_sms(mobile, [sms_code, 300 // 60], 1)
         redis_sms.setex('sms_%s' % mobile, 300, sms_code)
-        return Response({'message': 'OK',
-                         'sms_code': sms_code})
+        redis_sms.setex('send_flag_%s' % mobile, 60, 1)
+        return Response({'message': 'OK', 'sms_code': sms_code})
 
