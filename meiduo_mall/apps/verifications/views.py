@@ -26,9 +26,9 @@ class SMSCodeView(APIView):
         sms_code = '%06d' % randint(0, 999999)
         logger.info(sms_code)
         pl = redis_sms.pipeline()
-        # CCP().send_template_sms(mobile, [sms_code, constants.SMS_CODE_REDIS_EXPIRES // 60], constants.SEND_SMS_TEMPLATE_ID)
         # 测试异步发短信
-        send_sms_code.delay(mobile, sms_code, constants.SMS_CODE_REDIS_EXPIRES // 60, constants.SEND_SMS_TEMPLATE_ID)
+        # 暂时关闭
+        # send_sms_code.delay(mobile, sms_code, constants.SMS_CODE_REDIS_EXPIRES // 60, constants.SEND_SMS_TEMPLATE_ID)
         pl.setex('sms_%s' % mobile, constants.SMS_CODE_REDIS_EXPIRES, sms_code)
         pl.setex('send_flag_%s' % mobile, constants.SEND_SMS_CODE_INTERVAL, 1)
         pl.execute()
