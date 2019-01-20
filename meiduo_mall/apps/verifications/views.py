@@ -1,12 +1,12 @@
 from random import randint
 
-from django.shortcuts import render
 from django_redis import get_redis_connection
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from meiduo_mall.libs.yuntongxun.sms import CCP
+from . import constants
+from celery_tasks.sms.tasks import send_sms_code
 import logging
 
 logger = logging.getLogger('django')
@@ -25,8 +25,12 @@ class SMSCodeView(APIView):
             return Response({"message": "发送短信过于频繁"}, status=status.HTTP_400_BAD_REQUEST)
         sms_code = '%06d' % randint(0, 999999)
         logger.info(sms_code)
-        # CCP().send_template_sms(mobile, [sms_code, 300 // 60], 1)
-        redis_sms.setex('sms_%s' % mobile, 300, sms_code)
-        redis_sms.setex('send_flag_%s' % mobile, 60, 1)
+        pl = redis_sms.pipeline()
+        # CCP().send_template_sms(mobile, [sms_code, constants.SMS_CODE_REDIS_EXPIRES // 60], constants.SEND_SMS_TEMPLATE_ID)
+        # 测试异步发短信
+        send_sms_code.delay(mobile, sms_code, constants.SMS_CODE_REDIS_EXPIRES // 60, constants.SEND_SMS_TEMPLATE_ID)
+        pl.setex('sms_%s' % mobile, constants.SMS_CODE_REDIS_EXPIRES, sms_code)
+        pl.setex('send_flag_%s' % mobile, constants.SEND_SMS_CODE_INTERVAL, 1)
+        pl.execute()
         return Response({'message': 'OK', 'sms_code': sms_code})
 
