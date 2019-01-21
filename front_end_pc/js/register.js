@@ -18,6 +18,8 @@ var vm = new Vue({
 		allow: false,
 		sms_code_tip: '获取短信验证码',
 		error_sms_code_message: '',
+		error_name_message: '',
+		error_phone_message: '',
 	},
 	methods: {
 		// 检查用户名
@@ -172,7 +174,13 @@ var vm = new Vue({
                         responseType: 'json'
                     })
                     .then(response => {
-                        location.href = '/index.html';
+                    	// 记录用户的登录状态
+						sessionStorage.clear();
+						localStorage.clear();
+						localStorage.token = response.data.token;
+						localStorage.username = response.data.username;
+						localStorage.user_id = response.data.id;
+						location.href = '/index.html';
                     })
                     .catch(error=> {
                         if (error.response.status == 400) {
