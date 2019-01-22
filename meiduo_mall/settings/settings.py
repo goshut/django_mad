@@ -224,10 +224,16 @@ REST_FRAMEWORK = {
             'rest_framework.authentication.BasicAuthentication',
         ),
 }
-# jwt过期时长
+# jwt配置项
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'users.utils.jwt_response_payload_handler',
 }
 
 # 注册用户类 自定义models
 AUTH_USER_MODEL = 'users.User'
+
+# 修改默认的认证后端
+AUTHENTICATION_BACKENDS = [
+ 'users.utils.UsernameMobileAuthBackend',
+]
