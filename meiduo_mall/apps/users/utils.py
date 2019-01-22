@@ -1,7 +1,6 @@
 import re
 
 from django.contrib.auth.backends import ModelBackend
-from rest_framework.response import Response
 
 from users.models import User
 

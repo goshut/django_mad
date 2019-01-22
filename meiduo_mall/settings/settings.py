@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'users.apps.UsersConfig',
+    'oauth.apps.OauthConfig',  # QQ
 ]
 
 MIDDLEWARE = [
