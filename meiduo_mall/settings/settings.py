@@ -30,7 +30,7 @@ ALLOWED_HOSTS = [
     '192.168.28.128',
     '127.0.0.1',
     'api.meiduo.site',
-    # 'www.meiduo.site',
+    'www.meiduo.site',
 ]
 
 # CORS 追加⽩名单

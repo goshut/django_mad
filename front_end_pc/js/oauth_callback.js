@@ -2,7 +2,7 @@ var vm = new Vue({
     el: '#app',
     data: {
         host: host,
-        is_show_waiting: false,
+        is_show_waiting: true,
 
         error_password: false,
         error_phone: false,
@@ -107,6 +107,7 @@ var vm = new Vue({
                     responseType: 'json'
                 })
                 .then(response => {
+                    alert(response.data.sms_code);
                     // 表示后端发送短信成功
                     // 倒计时60秒，60秒后允许用户再次点击发送短信验证码的按钮
                     var num = 60;
