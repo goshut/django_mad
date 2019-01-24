@@ -1,4 +1,5 @@
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -14,7 +15,7 @@ class UserView(CreateAPIView):
 # url(r'^usernames/(?P<username>\w{5,20})/count/$', views.UsernameCountView.as_view()),
 class UsernameCountView(APIView):
     """
-    用户名数量
+    用户名数量以判断是否存在
     """
     def get(self, request, username):
         """
@@ -33,7 +34,7 @@ class UsernameCountView(APIView):
 # url(r'^mobiles/(?P<mobile>1[3-9]\d{9})/count/$', views.MobileCountView.as_view()),
 class MobileCountView(APIView):
     """
-    手机号数量
+    手机号数量以判断是否存在
     """
     def get(self, request, mobile):
         """
@@ -49,3 +50,12 @@ class MobileCountView(APIView):
         return Response(data)
 
 
+class UserDetailView(RetrieveAPIView):
+    """
+    用户详情
+    """
+    serializer_class = serializers.UserDetailSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
