@@ -1,0 +1,3 @@
+启动命令
+celery -A 应⽤的包路径 worker -l info
+celery -A celery_tasks.main worker -l info

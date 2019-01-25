@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'users.apps.UsersConfig',
+    'areas.apps.AreasConfig',
     'oauth.apps.OauthConfig',  # QQ
 ]
 
@@ -255,4 +256,4 @@ EMAIL_HOST_USER = 'goshut@163.com'
 # 在邮箱中设置的客户端授权密码
 EMAIL_HOST_PASSWORD = 'cnm163'
 # 收件人看到的发件人
-EMAIL_FROM = 'god'
+EMAIL_FROM = 'python<goshut@163.com>'

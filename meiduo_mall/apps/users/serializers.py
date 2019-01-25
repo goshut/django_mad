@@ -1,10 +1,14 @@
 import re
 
+from itsdangerous import TimedJSONWebSignatureSerializer as TJSS, BadData
 from django_redis import get_redis_connection
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 
+from meiduo_mall.settings import settings
+from users import constants
 from users.models import User
+from celery_tasks.email.tasks import send_verify_email
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -98,3 +102,53 @@ class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'mobile', 'email', 'email_active')
+
+
+class EmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email']
+        extra_kwargs = {
+            'email': {
+                'required': True
+            }
+        }
+
+    def update(self, instance, validated_data):
+        email = validated_data['email']
+        instance.email = email
+        instance.save()
+        verify_url = self.generate_verify_email_url(instance.id, email)
+        send_verify_email.delay(email, verify_url, from_email=settings.EMAIL_FROM)
+        return instance
+
+    @staticmethod
+    def generate_verify_email_url(user_id, email):
+        """
+        生成验证邮箱的url
+        """
+        serializer = TJSS(settings.SECRET_KEY, expires_in=constants.VERIFY_EMAIL_TOKEN_EXPIRES)
+        data = {'user_id': user_id, 'email': email}
+        token = serializer.dumps(data).decode()
+        verify_url = 'http://www.meiduo.site:8080/success_verify_email.html?token=' + token
+        return verify_url
+
+    @staticmethod
+    def check_verify_email_token(token):
+        """
+        检查验证邮件的token
+        """
+        serializer = TJSS(settings.SECRET_KEY, expires_in=constants.VERIFY_EMAIL_TOKEN_EXPIRES)
+        try:
+            data = serializer.loads(token)
+        except BadData:
+            return None
+        else:
+            email = data.get('email')
+            user_id = data.get('user_id')
+            try:
+                user = User.objects.get(id=user_id, email=email)
+            except User.DoesNotExist:
+                return None
+            else:
+                return user
