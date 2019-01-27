@@ -3,9 +3,10 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from areas.models import Area
 from areas.serializers import AreaSerializer, SubAreaSerializer
+from rest_framework_extensions.cache.mixins import CacheResponseMixin
 
 
-class AreasViewSet(ReadOnlyModelViewSet):
+class AreasViewSet(CacheResponseMixin, ReadOnlyModelViewSet):
     """
     行政区划信息
     def list(self, request, *args, **kwargs):
@@ -27,6 +28,8 @@ class AreasViewSet(ReadOnlyModelViewSet):
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
     """
+    pagination_class = None  # 区划信息不分页
+
     def get_queryset(self):
         """
         提供数据集
