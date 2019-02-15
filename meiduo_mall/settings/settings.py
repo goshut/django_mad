@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'areas.apps.AreasConfig',
     'oauth.apps.OauthConfig',  # QQ
+    'goods.apps.GoodsConfig',
 ]
 
 MIDDLEWARE = [
