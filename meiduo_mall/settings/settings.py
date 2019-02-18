@@ -267,3 +267,13 @@ EMAIL_HOST_USER = 'goshut@163.com'
 EMAIL_HOST_PASSWORD = 'cnm163'
 # 收件人看到的发件人
 EMAIL_FROM = 'python<goshut@163.com>'
+
+'''
+FastDFS配置相关
+'''
+# django文件存储
+DEFAULT_FILE_STORAGE = 'meiduo_mall.utils.fastdfs.fdfs_storage.FastDFSStorage'
+
+# FastDFS
+FDFS_URL = 'http://image.meiduo.site:8888/'
+FDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'utils/fastdfs/client.conf')
