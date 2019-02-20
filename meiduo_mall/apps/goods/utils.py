@@ -1,5 +1,4 @@
 from collections import OrderedDict
-from time import sleep
 
 from .models import GoodsChannel
 
@@ -21,7 +20,6 @@ def get_categories():
     #     }
     # }
     categories = OrderedDict()
-    sleep(1)
     channels = GoodsChannel.objects.order_by('group_id', 'sequence')
     for channel in channels:
         group_id = channel.group_id  # 当前组

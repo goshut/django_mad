@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from goods.models import GoodsChannel
 from . import models
 
 # Register your models here.
@@ -12,12 +11,12 @@ class GoodsCategoryAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.save()
         from celery_tasks.html.tasks import generate_static_list_search_html
-        generate_static_list_search_html.delay()
+        generate_static_list_search_html.apply_async(countdown=1)
 
     def delete_model(self, request, obj):
         obj.delete()
         from celery_tasks.html.tasks import generate_static_list_search_html
-        generate_static_list_search_html.delay()
+        generate_static_list_search_html.apply_async(countdown=1)
 
 
 admin.site.register(models.GoodsCategory, GoodsCategoryAdmin)
