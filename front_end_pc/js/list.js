@@ -65,9 +65,9 @@ var vm = new Vue({
     mounted: function(){
         this.cat = this.get_query_string('cat');
 
-        // this.get_skus();
+        this.get_skus();
 
-        // this.get_categories();
+        this.get_categories();
         // this.get_cart();
         // this.get_hot_goods();
     },
