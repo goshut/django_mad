@@ -162,3 +162,11 @@ class AddressViewSet(CreateModelMixin, UpdateModelMixin, GenericViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+
+class UserBrowsingHistoryView(CreateAPIView):
+    """
+    用户浏览历史记录
+    """
+    serializer_class = serializers.AddUserBrowsingHistorySerializer
+    permission_classes = [IsAuthenticated]
