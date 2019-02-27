@@ -79,7 +79,7 @@ var vm = new Vue({
         },
         // 添加购物车
         add_cart: function(){
-            axios.post(this.host+'/carts/', {
+            axios.post(this.host+'/cart/', {
                     sku_id: parseInt(this.sku_id),
                     count: this.sku_count
                 }, {

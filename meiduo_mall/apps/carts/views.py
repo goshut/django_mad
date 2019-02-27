@@ -8,7 +8,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from carts import constants
-from carts.serialziers import CartSerializer
+from carts.serialziers import CartSerializer, CartSKUSerializer
+from goods.models import SKU
 
 
 class CartView(APIView):
@@ -53,7 +54,7 @@ class CartView(APIView):
                 cart = {}
             sku = cart.get(sku_id)
             if sku:
-                count += cart.get(count)
+                count += cart[sku_id].get('count')
             cart[sku_id] = {
                 'count': count,
                 'selected': selected,
@@ -67,7 +68,36 @@ class CartView(APIView):
             return response
 
     def get(self, request):
-        pass
+        """
+        获取购物车
+        """
+        try:
+            user = request.user
+        except Exception:
+            user = None
+
+        if user is not None and user.is_authenticated:
+            redis_conn = get_redis_connection('cart')
+            redis_cart = redis_conn.hvals('cart_%s' % user.id)
+            redis_cart_selected = redis_conn.smembers('cart_selected_%s' % user.id)
+            cart = {}
+            for sku_id, count in redis_cart.items():
+                cart[int(sku_id)] = {
+                    'count': int(count),
+                    'selected': sku_id in redis_cart_selected
+                }
+        else:
+            cart = request.COOKIES.get('cart')
+            if cart is not None:
+                cart = pickle.loads(base64.b64decode(cart.encode()))
+            else:
+                cart = {}
+        skus = SKU.objects.filter(id__in=cart.keys())
+        for sku in skus:
+            sku.count = cart[sku.id]['count']
+            sku.selected = cart[sku.id]['selected']
+        serializer = CartSKUSerializer(skus, many=True)
+        return Response(serializer.data)
 
     def put(self, request):
         pass

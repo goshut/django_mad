@@ -185,6 +185,13 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
+    "cart": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://0.0.0.0:6379/4",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
 }
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "session"
