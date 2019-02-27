@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^usernames/(?P<username>\w{5,20})/count/$', views.UsernameCountView.as_view()),
     url(r'^mobiles/(?P<mobile>1[3-9]\d{9})/count/$', views.MobileCountView.as_view()),
     url(r'^emails/verification/$', views.VerifyEmailView.as_view()),  # 邮箱验证
-    url(r'^authorizations/$', obtain_jwt_token),  # JWT登录
+    url(r'^authorizations/$', views.UserAuthorizeView.as_view()),  # JWT登录
     url(r'^browse_histories/$', views.UserBrowsingHistoryView.as_view()),  # 用户浏览记录保存
 ]
 

@@ -78,7 +78,7 @@ class CartView(APIView):
 
         if user is not None and user.is_authenticated:
             redis_conn = get_redis_connection('cart')
-            redis_cart = redis_conn.hvals('cart_%s' % user.id)
+            redis_cart = redis_conn.hgetall('cart_%s' % user.id)
             redis_cart_selected = redis_conn.smembers('cart_selected_%s' % user.id)
             cart = {}
             for sku_id, count in redis_cart.items():

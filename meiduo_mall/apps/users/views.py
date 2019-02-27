@@ -7,7 +7,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
+from rest_framework_jwt.views import ObtainJSONWebToken
 
+from carts.utils import merge_cart_cookie_to_redis
 from goods.models import SKU
 from goods.serializers import SKUSerializer
 from users import constants
@@ -186,3 +188,17 @@ class UserBrowsingHistoryView(CreateAPIView):
             skus.append(sku)
         s = SKUSerializer(skus, many=True)
         return Response(s.data)
+
+
+# 正常登陆合并购物车
+class UserAuthorizeView(ObtainJSONWebToken):
+    def post(self, request, *args, **kwargs):
+        response = super(UserAuthorizeView, self).post(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data.get('user')
+            response = merge_cart_cookie_to_redis(request, user, response)
+
+        return response
+
+

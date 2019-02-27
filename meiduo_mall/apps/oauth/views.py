@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_jwt.settings import api_settings
 
+from carts.utils import merge_cart_cookie_to_redis
 from meiduo_mall.settings import settings
 from oauth import serializers
 from oauth.models import OAuthQQUser
@@ -76,6 +77,8 @@ class QQAuthUserView(GenericAPIView):
                 'user_id': user.id,
                 'username': user.username
             })
+            # 合并购物车
+            merge_cart_cookie_to_redis(request, user, response)
 
             return response
 
@@ -87,5 +90,8 @@ class QQAuthUserView(GenericAPIView):
         jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
         payload = jwt_payload_handler(user)
         token = jwt_encode_handler(payload)
-        return Response({'token': token, 'user_id': user.id, 'username': user.username})
+        response = Response({'token': token, 'user_id': user.id, 'username': user.username})
+        # 合并购物车
+        merge_cart_cookie_to_redis(request, user, response)
+        return response
 
