@@ -12,3 +12,6 @@ python manage.py crontab remove
 定时任务有[
 generate_static_index_html:定时生成首页,
 ]
+
+沙厢账号:yuhlao9778@sandbox.com
+mimi:111111

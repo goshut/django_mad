@@ -322,3 +322,7 @@ CRONJOBS = [
 ]
 # 解决crontab中文问题
 CRONTAB_COMMAND_PREFIX = 'LANG_ALL=zh_cn.UTF-8'
+
+ALIPAY_APPID = '2016091900551154'
+ALIPAY_DEBUG = True  # 将来换成真实环境些改为False
+ALIPAY_URL = 'https://openapi.alipaydev.com/gateway.do'  # 真实去掉alipaydev 后面dev
