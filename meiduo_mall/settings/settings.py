@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'contents.apps.ContentsConfig',
     'carts.apps.CartsConfig',
     'orders.apps.OrdersConfig',  # 订单
+    'payment.apps.PaymentConfig',  # 订单
 ]
 
 MIDDLEWARE = [
